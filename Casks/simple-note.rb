@@ -8,7 +8,7 @@ cask "simple-note" do
   homepage "https://github.com/yurseria/simple-note"
 
   depends_on arch: :arm64
-  depends_on macos: ">= :ventura"
+  depends_on macos: :ventura
 
   app "Note.app"
 
