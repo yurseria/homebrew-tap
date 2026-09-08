@@ -1,0 +1,45 @@
+name: Update casks
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 */6 * * *'
+  push:
+    branches: [main]
+    paths:
+      - scripts/**
+      - .github/workflows/update-casks.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-casks
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Update from published releases and verify downloads
+        run: node scripts/update-casks.mjs
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: Validate Ruby syntax
+        run: |
+          ruby -c Casks/containbar.rb
+          ruby -c Casks/simple-note.rb
+          git diff --check
+      - name: Commit updated casks
+        run: |
+          git add Casks/containbar.rb Casks/simple-note.rb
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'chore: update casks from upstream releases'
+          git push origin HEAD:main
