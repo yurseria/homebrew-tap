@@ -1,8 +1,8 @@
 cask "containbar" do
-  version "0.6.0"
-  sha256 "ce3da75746e6d87dd028bc5c17369a42bc0a229d62d012eee454020bb209ebda"
+  version "0.6.1"
+  sha256 "fd46a196ddd693b985d9ccb31ff93ad20df46040354b2785e43c8cd6da8a93a5"
 
-  url "https://github.com/yurseria/containbar/releases/download/v0.6.0/Docker.Tray_0.6.0_aarch64.dmg"
+  url "https://github.com/yurseria/containbar/releases/download/v0.6.1/Docker.Tray_0.6.1_aarch64.dmg"
   name "Containbar"
   desc "Manage Docker, Colima, and Apple containers from the menu bar"
   homepage "https://github.com/yurseria/containbar"
