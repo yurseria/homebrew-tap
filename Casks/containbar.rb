@@ -12,10 +12,16 @@ cask "containbar" do
 
   app "Docker Tray.app"
 
+  postflight do
+    system_command "/usr/bin/xattr",
+                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Docker Tray.app"],
+                   sudo: false
+  end
+
   caveats <<~EOS
     This app is not Developer ID signed or notarized.
-    If macOS blocks it, open System Settings > Privacy & Security > Open Anyway
-    only if you trust this app and its source. This cask does not bypass Gatekeeper.
+    This cask removes its quarantine attribute after installation.
+    Install it only if you trust this app and its source.
     This release still installs Docker Tray.app; Containbar is its new name.
   EOS
 end

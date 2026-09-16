@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 // Only release assets from these two upstream repositories are accepted.
 const apps = [
   { token: 'containbar', repo: 'containbar', name: 'Containbar', desc: 'Manage Docker, Colima, and Apple containers from the menu bar',
-    pattern: /^(Containbar|Docker[. ]Tray)_([0-9]+\.[0-9]+\.[0-9]+)_aarch64\.dmg$/, bundles: { Containbar: 'Containbar.app', 'Docker.Tray': 'Docker Tray.app', 'Docker Tray': 'Docker Tray.app' } },
+    pattern: /^(Containbar|Docker[. ]Tray)_([0-9]+\.[0-9]+\.[0-9]+)_aarch64\.dmg$/, bundles: { Containbar: 'Containbar.app', 'Docker.Tray': 'Docker Tray.app', 'Docker Tray': 'Docker Tray.app' }, clearQuarantine: true },
   { token: 'simple-note', repo: 'simple-note', name: 'Simple Note', desc: 'Text and Markdown editor for focused writing',
     pattern: /^(Note)_([0-9]+\.[0-9]+\.[0-9]+)_aarch64\.dmg$/, bundles: { Note: 'Note.app' } },
 ];
@@ -42,6 +42,17 @@ for (const app of apps) {
   if (asset.digest && asset.digest !== `sha256:${sha}`) throw new Error('GitHub asset digest mismatch');
   const bundle = app.bundles[match[1]];
   const legacy = bundle === 'Docker Tray.app';
+  const postflight = app.clearQuarantine ? `
+  postflight do
+    system_command "/usr/bin/xattr",
+                   args: ["-dr", "com.apple.quarantine", "#{appdir}/${bundle}"],
+                   sudo: false
+  end
+` : '';
+  const gatekeeperCaveat = app.clearQuarantine
+    ? '    This cask removes its quarantine attribute after installation.\n    Install it only if you trust this app and its source.'
+    : '    If macOS blocks it, open System Settings > Privacy & Security > Open Anyway\n    only if you trust this app and its source. This cask does not bypass Gatekeeper.';
+  const legacyCaveat = legacy ? '\n    This release still installs Docker Tray.app; Containbar is its new name.' : '';
   const cask = `cask "${app.token}" do
   version "${version}"
   sha256 "${sha}"
@@ -55,12 +66,11 @@ for (const app of apps) {
   depends_on macos: :ventura
 
   app "${bundle}"
-
+${postflight}
   caveats <<~EOS
     This app is not Developer ID signed or notarized.
-    If macOS blocks it, open System Settings > Privacy & Security > Open Anyway
-    only if you trust this app and its source. This cask does not bypass Gatekeeper.
-${legacy ? '    This release still installs Docker Tray.app; Containbar is its new name.\n' : ''}  EOS
+${gatekeeperCaveat}${legacyCaveat}
+  EOS
 end
 `;
   await writeFile(`${directory}${app.token}.rb`, cask);
