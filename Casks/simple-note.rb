@@ -12,9 +12,15 @@ cask "simple-note" do
 
   app "Note.app"
 
+  postflight do
+    system_command "/usr/bin/xattr",
+                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Note.app"],
+                   sudo: false
+  end
+
   caveats <<~EOS
     This app is not Developer ID signed or notarized.
-    If macOS blocks it, open System Settings > Privacy & Security > Open Anyway
-    only if you trust this app and its source. This cask does not bypass Gatekeeper.
+    This cask removes its quarantine attribute after installation.
+    Install it only if you trust this app and its source.
   EOS
 end

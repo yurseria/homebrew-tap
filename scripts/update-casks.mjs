@@ -7,7 +7,7 @@ const apps = [
   { token: 'containbar', repo: 'containbar', name: 'Containbar', desc: 'Manage Docker, Colima, and Apple containers from the menu bar',
     pattern: /^(Containbar|Docker[. ]Tray)_([0-9]+\.[0-9]+\.[0-9]+)_aarch64\.dmg$/, bundles: { Containbar: 'Containbar.app', 'Docker.Tray': 'Docker Tray.app', 'Docker Tray': 'Docker Tray.app' }, clearQuarantine: true },
   { token: 'simple-note', repo: 'simple-note', name: 'Simple Note', desc: 'Text and Markdown editor for focused writing',
-    pattern: /^(Note)_([0-9]+\.[0-9]+\.[0-9]+)_aarch64\.dmg$/, bundles: { Note: 'Note.app' } },
+    pattern: /^(Note)_([0-9]+\.[0-9]+\.[0-9]+)_aarch64\.dmg$/, bundles: { Note: 'Note.app' }, clearQuarantine: true },
 ];
 const directory = fileURLToPath(new URL('../Casks/', import.meta.url));
 await mkdir(directory, { recursive: true });
