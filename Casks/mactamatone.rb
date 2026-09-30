@@ -1,8 +1,8 @@
 cask "mactamatone" do
-  version "0.1.0"
-  sha256 "7e6010a77e80b404031ad730f2226f417eef16ce77a31f913b8b66c39d0d6231"
+  version "0.2.0"
+  sha256 "19401ebf30aa9b8d43a2f08c57d5fdf8fd2ab8fc928e6710ea49668f412822d5"
 
-  url "https://github.com/yurseria/mactamatone/releases/download/v0.1.0/Mactamatone_0.1.0_aarch64.dmg"
+  url "https://github.com/yurseria/mactamatone/releases/download/v0.2.0/Mactamatone_0.2.0_aarch64.dmg"
   name "Mactamatone"
   desc "Play an Otamatone using your MacBook lid angle"
   homepage "https://github.com/yurseria/mactamatone"
