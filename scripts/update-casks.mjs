@@ -2,12 +2,15 @@ import { createHash } from 'node:crypto';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
-// Only release assets from these two upstream repositories are accepted.
+// Only release assets from these upstream repositories are accepted.
 const apps = [
   { token: 'containbar', repo: 'containbar', name: 'Containbar', desc: 'Manage Docker, Colima, and Apple containers from the menu bar',
     pattern: /^(Containbar|Docker[. ]Tray)_([0-9]+\.[0-9]+\.[0-9]+)_aarch64\.dmg$/, bundles: { Containbar: 'Containbar.app', 'Docker.Tray': 'Docker Tray.app', 'Docker Tray': 'Docker Tray.app' }, clearQuarantine: true },
   { token: 'simple-note', repo: 'simple-note', name: 'Simple Note', desc: 'Text and Markdown editor for focused writing',
     pattern: /^(Note)_([0-9]+\.[0-9]+\.[0-9]+)_aarch64\.dmg$/, bundles: { Note: 'Note.app' }, clearQuarantine: true },
+  { token: 'mactamatone', repo: 'mactamatone', name: 'Mactamatone', desc: 'Play an Otamatone using your MacBook lid angle',
+    pattern: /^(Mactamatone)_([0-9]+\.[0-9]+\.[0-9]+)_aarch64\.dmg$/, bundles: { Mactamatone: 'Mactamatone.app' },
+    clearQuarantine: true, minMacos: 'sonoma' },
 ];
 const directory = fileURLToPath(new URL('../Casks/', import.meta.url));
 await mkdir(directory, { recursive: true });
@@ -63,7 +66,7 @@ for (const app of apps) {
   homepage "https://github.com/yurseria/${app.repo}"
 
   depends_on arch: :arm64
-  depends_on macos: :ventura
+  depends_on macos: :${app.minMacos ?? 'ventura'}
 
   app "${bundle}"
 ${postflight}

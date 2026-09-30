@@ -34,10 +34,11 @@ jobs:
         run: |
           ruby -c Casks/containbar.rb
           ruby -c Casks/simple-note.rb
+          ruby -c Casks/mactamatone.rb
           git diff --check
       - name: Commit updated casks
         run: |
-          git add Casks/containbar.rb Casks/simple-note.rb
+          git add Casks/containbar.rb Casks/simple-note.rb Casks/mactamatone.rb
           if git diff --cached --quiet; then exit 0; fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'

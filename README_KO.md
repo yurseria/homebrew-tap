@@ -2,38 +2,34 @@
 
 [English](README.md) / 한국어
 
-Containbar와 Simple Note를 위한 개인 Homebrew Cask 저장소입니다.
+[Containbar](https://github.com/yurseria/containbar), [Simple Note](https://github.com/yurseria/simple-note), [맥타마톤](https://github.com/yurseria/mactamatone)을 위한 Homebrew Cask 저장소입니다.
 
 ## 설치
 
-Homebrew, macOS 13 이상, Apple Silicon이 필요합니다. 현재 이 Tap은 Intel용 빌드를 제공하지 않습니다.
+Homebrew와 Apple Silicon 맥이 필요합니다. Containbar와 Simple Note는 macOS 13 이상, 맥타마톤은 macOS 14 이상을 지원합니다.
 
 ```sh
 brew install --cask yurseria/tap/containbar
 brew install --cask yurseria/tap/simple-note
+brew install --cask yurseria/tap/mactamatone
 ```
 
-`--cask`는 명령줄 도구 대신 GUI 앱 패키지를 설치하는 옵션입니다. 개인 Tap 신뢰 여부를 물으면 내용을 확인하고 승인하세요.
+Containbar는 현재 `Docker Tray.app`, Simple Note는 `Note.app`, 맥타마톤은 `Mactamatone.app`으로 설치됩니다. 같은 앱을 수동으로 설치했다면 앱을 종료하고 기존 번들을 Applications 밖으로 옮긴 후 Cask를 설치하세요.
 
-Containbar v0.6.0은 아직 **Docker Tray.app**으로 배포됩니다. 새 이름의 릴리스가 나오면 자동 전환됩니다. Simple Note는 **Note.app**으로 설치됩니다. 수동 설치한 동일 앱이 있다면 앱을 종료하고 기존 앱 번들을 백업하거나 Applications 밖으로 옮겨 충돌을 피하세요. 설정이나 문서는 삭제할 필요가 없습니다.
+## 서명과 최초 실행
 
-## 서명 없는 앱의 최초 실행
-
-두 앱은 Developer ID 서명 및 공증이 되어 있지 않습니다. Homebrew 설치가 Apple의 검증을 대신하지 않습니다. 신뢰하는 앱이 macOS에 차단된다면 **시스템 설정 → 개인정보 보호 및 보안 → 확인 없이 열기**로 허용하세요. [Apple 안내](https://support.apple.com/en-us/102445)
-
-이 Tap은 quarantine을 제거하거나 Gatekeeper를 끄지 않습니다. SHA-256은 다운로드 무결성을 확인할 뿐 서명·공증을 대체하지 않습니다. 관리형 Mac에서는 실행 예외가 제한될 수 있습니다.
+이 앱들은 Developer ID 서명 및 Apple 공증이 되어 있지 않습니다. Cask는 다운로드 파일의 SHA-256 체크섬을 검증하고, 설치 후 앱의 격리 속성을 제거합니다. 체크섬은 서명·공증을 대체하지 않습니다. 앱 소스와 이 Tap을 신뢰하는 경우에만 설치하세요.
 
 ## 업데이트 및 제거
 
 ```sh
 brew update
-brew upgrade --cask yurseria/tap/containbar yurseria/tap/simple-note
-brew uninstall --cask yurseria/tap/containbar
-brew uninstall --cask yurseria/tap/simple-note
+brew upgrade --cask yurseria/tap/containbar yurseria/tap/simple-note yurseria/tap/mactamatone
+brew uninstall --cask yurseria/tap/mactamatone
 ```
 
-제거 시 앱 번들만 제거하며 문서·설정은 유지합니다.
+Cask 제거 시 앱 번들만 삭제하며 문서와 설정은 유지합니다.
 
-## 자동 갱신
+## 관리
 
-6시간마다 최신 정식 릴리스의 Apple Silicon DMG를 확인하고, 다운로드한 파일의 SHA-256과 GitHub 체크섬을 대조하여 Cask를 갱신합니다. Actions에서 수동 실행도 가능합니다. 별도 저장소 접근 토큰은 필요하지 않습니다. 빌드 중 파일이 없으면 다음 실행에 재시도하며, 예상하지 못한 파일명은 오류로 처리합니다. 장기간 활동이 없으면 GitHub가 예약 실행을 중지할 수 있으므로 업데이트가 멈추면 워크플로를 다시 활성화하세요.
+GitHub Actions가 6시간마다 각 앱의 최신 정식 릴리스를 확인합니다. Apple Silicon DMG를 다운로드해 크기와 GitHub 다이제스트를 확인하고 SHA-256을 계산한 뒤 Cask를 갱신합니다. 릴리스 파일이 아직 없으면 다음 실행에서 재시도하며, 예상하지 못한 파일명이나 중복 파일은 오류로 처리합니다. 워크플로를 수동으로 실행할 수도 있습니다. 로컬 갱신에는 Node.js 22 이상에서 `node scripts/update-casks.mjs`를 사용합니다.
