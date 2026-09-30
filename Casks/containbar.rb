@@ -12,10 +12,11 @@ cask "containbar" do
 
   app "Docker Tray.app"
 
-  postflight do
-    system_command "/usr/bin/xattr",
-                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Docker Tray.app"],
-                   sudo: false
+  postflight_steps do
+    run "/usr/bin/xattr",
+        args:         ["-dr", "com.apple.quarantine", "{{appdir}}/Docker Tray.app"],
+        sudo:         false,
+        must_succeed: false
   end
 
   caveats <<~EOS

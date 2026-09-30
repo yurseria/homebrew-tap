@@ -12,10 +12,11 @@ cask "simple-note" do
 
   app "Note.app"
 
-  postflight do
-    system_command "/usr/bin/xattr",
-                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Note.app"],
-                   sudo: false
+  postflight_steps do
+    run "/usr/bin/xattr",
+        args:         ["-dr", "com.apple.quarantine", "{{appdir}}/Note.app"],
+        sudo:         false,
+        must_succeed: false
   end
 
   caveats <<~EOS

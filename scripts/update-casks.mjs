@@ -46,10 +46,11 @@ for (const app of apps) {
   const bundle = app.bundles[match[1]];
   const legacy = bundle === 'Docker Tray.app';
   const postflight = app.clearQuarantine ? `
-  postflight do
-    system_command "/usr/bin/xattr",
-                   args: ["-dr", "com.apple.quarantine", "#{appdir}/${bundle}"],
-                   sudo: false
+  postflight_steps do
+    run "/usr/bin/xattr",
+        args:         ["-dr", "com.apple.quarantine", "{{appdir}}/${bundle}"],
+        sudo:         false,
+        must_succeed: false
   end
 ` : '';
   const gatekeeperCaveat = app.clearQuarantine
